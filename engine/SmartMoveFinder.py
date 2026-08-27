@@ -1,4 +1,6 @@
 import random
+from engine.evaluation import Evaluator
+_evaluator = Evaluator()
 
 pieceScore = {"k": 0, "q": 9, "r": 5, "b": 3, "n": 3, "p": 1}
 CHECKMATE = 1000
@@ -105,21 +107,7 @@ def NegaMaxAlphaBeta(gs, validMoves, depth, alpha, beta, turnMultiplier):
 
 
 def scoreBoard(gs):
-    if gs.checkmate:
-        if gs.whiteToMove:
-            return -CHECKMATE  # black wins
-        else:
-            return CHECKMATE  # white wins
-    elif gs.stalemate:
-        return STALEMATE
-    score = 0
-    for row in gs.board:
-        for square in row:
-            if square[0] == 'W':
-                score += pieceScore[square[1].lower()]
-            elif square[0] == 'B':
-                score -= pieceScore[square[1].lower()]
-    return score
+    return _evaluator.evaluate(gs, CHECKMATE, STALEMATE)
 
 
 def scoreMaterial(board):
